@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shop_/providers/products_provider.dart';
+import 'package:shop_/providers/couter_provider.dart';
 import 'package:shop_/utils/app_routes.dart';
 import 'package:shop_/views/product_detail_screen.dart';
 
@@ -13,8 +12,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ProductsProvider(),
+    return CounterProvider(
       child: MaterialApp(
         title: 'Minha Loja',
         theme: ThemeData(

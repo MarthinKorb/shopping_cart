@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_/models/product.dart';
+import 'package:shop_/providers/products_provider.dart';
 import 'package:shop_/widgets/product_item.dart';
 
 class ProductOverviewScreen extends StatelessWidget {
-  final List<Product> loadedProducts = List.generate(
-    10,
-    (index) => Product(
-      id: index.toString(),
-      title: 'Título $index',
-      description: 'Título $index',
-      price: 100,
-      imageUrl:
-          'https://images.madeiramadeira.com.br/product/images/64691864-furadeira-de-impacto-eletrica-16mm-5-8-makita-hp1640-110v10461-3226-1-600x600.jpg',
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
+    final List<Product> loadedProducts =
+        Provider.of<ProductsProvider>(context).items;
     return Scaffold(
       appBar: AppBar(title: Text('Minha Loja')),
       body: GridView.builder(
