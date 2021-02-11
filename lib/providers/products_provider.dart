@@ -3,7 +3,7 @@ import 'package:shop_/models/product.dart';
 
 class ProductsProvider with ChangeNotifier {
   List<Product> _items = List.generate(
-    10,
+    15,
     (index) => Product(
       id: index.toString(),
       title: 'Título $index',
