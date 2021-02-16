@@ -1,7 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shop_/models/product.dart';
+import 'package:http/http.dart' as http;
 
 class ProductsProvider with ChangeNotifier {
+  // Future<Product> getProducts() async {
+  //   var response = await http.get('https://fakestoreapi.com/products/1');
+  //   return Product.fromJson(response.body);
+  // }
+
   List<Product> _items = List.generate(
     15,
     (index) => Product(

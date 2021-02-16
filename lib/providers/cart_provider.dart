@@ -37,7 +37,7 @@ class CartProvider with ChangeNotifier {
           id: existingItem.id,
           productId: product.id,
           title: existingItem.title,
-          quantity: existingItem.quantity,
+          quantity: existingItem.quantity + 1,
           price: existingItem.price,
         ),
       );
