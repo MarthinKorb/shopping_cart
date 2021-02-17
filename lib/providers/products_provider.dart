@@ -29,6 +29,8 @@ class ProductsProvider with ChangeNotifier {
     _items.add(product);
     notifyListeners();
   }
+
+  int get itemsCount => _items.length;
 }
 // bool _showFavoriteOnly = false;
 

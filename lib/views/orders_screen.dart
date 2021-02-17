@@ -13,12 +13,22 @@ class OrdersScreen extends StatelessWidget {
         title: Text('Meus pedidos'),
       ),
       drawer: AppDrawer(),
-      body: ListView.builder(
-        itemCount: ordersProvider.orders.length,
-        itemBuilder: (context, index) => OrderWidget(
-          order: ordersProvider.orders[index],
-        ),
-      ),
+      body: ordersProvider.orders.length > 0
+          ? ListView.builder(
+              itemCount: ordersProvider.orders.length,
+              itemBuilder: (context, index) => OrderWidget(
+                order: ordersProvider.orders[index],
+              ),
+            )
+          : Center(
+              child: Text(
+                'Você não tem pedidos.',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            ),
     );
   }
 }
