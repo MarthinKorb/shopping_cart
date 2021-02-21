@@ -21,8 +21,8 @@ class ProductGridItem extends StatelessWidget {
             );
           },
           child: Image.network(
-            product.imageUrl,
-            fit: BoxFit.cover,
+            product.image,
+            fit: BoxFit.contain,
           ),
         ),
         footer: GridTileBar(
@@ -30,7 +30,10 @@ class ProductGridItem extends StatelessWidget {
           leading: Consumer<Product>(
             builder: (context, product, _) => IconButton(
               icon: Icon(
-                  product.isFavorite ? Icons.favorite : Icons.favorite_border),
+                product.isFavorite == 1
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+              ),
               onPressed: () {
                 product.toggleFavorite();
               },
@@ -41,8 +44,8 @@ class ProductGridItem extends StatelessWidget {
             product.title,
             textAlign: TextAlign.center,
           ),
-          trailing: Consumer<CartProvider>(
-            builder: (context, value, _) => IconButton(
+          trailing: Consumer<CartProvider>(builder: (context, value, _) {
+            return IconButton(
               icon: value.isItemInCart(product.id)
                   ? Icon(Icons.shopping_cart)
                   : Icon(Icons.shopping_cart_outlined),
@@ -51,20 +54,20 @@ class ProductGridItem extends StatelessWidget {
                 Scaffold.of(context).hideCurrentSnackBar();
                 Scaffold.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(
-                        'Produto ${product.description} inserido no carrinho.'),
+                    content:
+                        Text('Produto ${product.title} inserido no carrinho.'),
                     action: SnackBarAction(
                       label: 'DESFAZER',
                       onPressed: () {
-                        value.removeSingleItem(product.id);
+                        value.removeSingleItem(product.id.toString());
                       },
                     ),
                   ),
                 );
               },
               color: Theme.of(context).accentColor,
-            ),
-          ),
+            );
+          }),
         ),
       ),
     );

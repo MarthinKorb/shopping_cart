@@ -32,6 +32,14 @@ class AppDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed(AppRoutes.PRODUCTS);
             },
           ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.sync_outlined),
+            title: Text('Sincronizar'),
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed(AppRoutes.SYNC_PAGE);
+            },
+          ),
         ],
       ),
     );

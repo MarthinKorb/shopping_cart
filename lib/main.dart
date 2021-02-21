@@ -9,6 +9,8 @@ import 'package:shop_/views/orders_screen.dart';
 import 'package:shop_/views/product_detail_screen.dart';
 import 'package:shop_/views/product_form_screen.dart';
 import 'package:shop_/views/products_screen.dart';
+import 'package:shop_/views/sync.dart';
+import 'package:shop_/views/sync_page.dart';
 
 import 'views/products_overview_screen.dart';
 
@@ -40,6 +42,8 @@ class MyApp extends StatelessWidget {
           AppRoutes.MY_ORDERS: (context) => OrdersScreen(),
           AppRoutes.PRODUCTS: (context) => ProductsScreen(),
           AppRoutes.PRODUCT_FORM: (context) => ProductFormScreen(),
+          AppRoutes.SYNC_PAGE: (context) => SyncPage(),
+          AppRoutes.REAL_SYNC: (context) => RealSync(),
         },
       ),
     );

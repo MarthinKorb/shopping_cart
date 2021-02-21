@@ -1,8 +1,10 @@
 class AppRoutes {
-  static final HOME = '/';
-  static final PRODUCT_DETAIL = '/product-detail';
-  static final CART = '/cart';
-  static final MY_ORDERS = '/my-orders';
-  static final PRODUCTS = '/products';
-  static final PRODUCT_FORM = '/product-form';
+  static const HOME = '/';
+  static const PRODUCT_DETAIL = '/product-detail';
+  static const CART = '/cart';
+  static const MY_ORDERS = '/my-orders';
+  static const PRODUCTS = '/products';
+  static const PRODUCT_FORM = '/product-form';
+  static const SYNC_PAGE = '/sync-page';
+  static const REAL_SYNC = '/real-sync';
 }

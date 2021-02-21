@@ -1,29 +1,58 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:shop_/models/product.dart';
 import 'package:http/http.dart' as http;
+import 'package:shop_/services/database_service.dart';
 
 class ProductsProvider with ChangeNotifier {
-  // Future<Product> getProducts() async {
-  //   var response = await http.get('https://fakestoreapi.com/products/1');
-  //   return Product.fromJson(response.body);
-  // }
+  static const String apiURL = 'https://fakestoreapi.com/products';
+  final List<Product> _items = List<Product>();
 
-  List<Product> _items = List.generate(
-    15,
-    (index) => Product(
-      id: index.toString(),
-      title: 'Título $index',
-      description: 'Título $index',
-      price: 100,
-      imageUrl:
-          'https://images.madeiramadeira.com.br/product/images/64691864-furadeira-de-impacto-eletrica-16mm-5-8-makita-hp1640-110v10461-3226-1-600x600.jpg',
-    ),
-  );
+  Future<List<Product>> loadList() async {
+    try {
+      _items.clear();
+      final response = await http.get(apiURL);
+      if (response.statusCode == 200) {
+        var decodeJSON = jsonDecode(response.body);
+
+        decodeJSON.forEach((item) {
+          _items.add(Product.fromMap(item));
+        });
+        return _items;
+      } else {
+        print('A lista está vazia!');
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    notifyListeners();
+    return _items;
+  }
+
+  Future<List<Product>> loadProductsFromDB() async {
+    var records = await DatabaseService.query("Product");
+    return List.generate(records.length, (i) {
+      return Product(
+        id: records[i]["id"],
+        title: records[i]["title"],
+        description: records[i]["description"],
+        category: records[i]["category"],
+        price: records[i]["price"],
+        image: records[i]["image"],
+        isFavorite: records[i]["isFavorite"],
+      );
+    });
+  }
+
+  Future<int> updateProduct(dynamic id, Product product) async {
+    return await DatabaseService.update('Product', id, product.toMap());
+  }
 
   List<Product> get items => [..._items];
 
   List<Product> get favoriteItems =>
-      _items.where((product) => product.isFavorite).toList();
+      _items.where((product) => product.isFavorite == 1).toList();
 
   void addProduct(Product product) {
     _items.add(product);
@@ -32,19 +61,3 @@ class ProductsProvider with ChangeNotifier {
 
   int get itemsCount => _items.length;
 }
-// bool _showFavoriteOnly = false;
-
-// void showAll() {
-//   _showFavoriteOnly = false;
-//   notifyListeners();
-// }
-// void showFavoriteOnly() {
-//   _showFavoriteOnly = true;
-//   notifyListeners();
-// }
-
-//  List<Product> get items {
-//   if (_showFavoriteOnly) {
-//     return _items.where((product) => product.isFavorite).toList();
-//   }
-//   return [..._items];

@@ -15,8 +15,8 @@ class OrdersProvider with ChangeNotifier {
     _orders.insert(
       0,
       Order(
-        id: Random().nextDouble().toString(),
-        total: cart.totalAmount,
+        id: Random().nextDouble(),
+        total: double.tryParse(cart.totalAmount.toStringAsFixed(2)),
         date: DateTime.now(),
         products: cart.items.values.toList(),
       ),

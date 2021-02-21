@@ -19,9 +19,9 @@ class CartScreen extends StatelessWidget {
       body: Column(
         children: [
           Card(
-            margin: EdgeInsets.all(25),
+            margin: EdgeInsets.all(20),
             child: Padding(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -34,7 +34,7 @@ class CartScreen extends StatelessWidget {
                   SizedBox(width: 10),
                   Chip(
                     label: Text(
-                      'R\$ ${cartProvider.totalAmount}',
+                      'R\$ ${cartProvider.totalAmount.toStringAsFixed(2)}',
                       style: TextStyle(
                         color:
                             Theme.of(context).primaryTextTheme.headline6.color,
@@ -57,14 +57,46 @@ class CartScreen extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Expanded(
-            child: ListView.builder(
-              itemCount: cartProvider.itemCount,
-              itemBuilder: (context, index) =>
-                  CartItemWidget(cartItem: cartItems[index]),
-            ),
+            child: cartProvider.isCartEmpty()
+                ? EmptyCartIWarning()
+                : ListView.builder(
+                    itemCount: cartProvider.itemCount,
+                    itemBuilder: (context, index) {
+                      return CartItemWidget(cartItem: cartItems[index]);
+                    },
+                  ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class EmptyCartIWarning extends StatelessWidget {
+  const EmptyCartIWarning({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.shopping_cart_outlined,
+          color: Theme.of(context).primaryColor,
+          size: 60,
+        ),
+        SizedBox(height: 10),
+        Text(
+          'Seu carrinho está vazio...',
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
     );
   }
 }

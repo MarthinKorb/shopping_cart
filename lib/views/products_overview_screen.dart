@@ -18,14 +18,21 @@ class ProductOverviewScreen extends StatefulWidget {
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   bool _showFavoritesOnly = false;
+  bool _showCompactGrid = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Minha Loja'),
-        centerTitle: true,
         actions: [
+          IconButton(
+            icon: Icon(Icons.filter_alt_outlined),
+            onPressed: () {
+              setState(() {
+                _showCompactGrid = !_showCompactGrid;
+              });
+            },
+          ),
           PopupMenuButton(
             onSelected: (FilterOptions selectedValue) {
               setState(() {
@@ -62,7 +69,10 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           ),
         ],
       ),
-      body: ProductGrid(showOnlyFavorite: _showFavoritesOnly),
+      body: ProductGrid(
+        showOnlyFavorite: _showFavoritesOnly,
+        showCompactGrid: _showCompactGrid,
+      ),
       drawer: AppDrawer(),
     );
   }

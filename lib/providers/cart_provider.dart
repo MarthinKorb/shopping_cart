@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:shop_/models/product.dart';
 
 class CartItem {
-  final String id;
-  final String productId;
+  final dynamic id;
+  final dynamic productId;
   final String title;
   final int quantity;
-  final double price;
+  final dynamic price;
   CartItem({
     @required this.id,
     @required this.productId,
@@ -19,20 +19,22 @@ class CartItem {
 }
 
 class CartProvider with ChangeNotifier {
-  Map<String, CartItem> _items = {};
+  Map<dynamic, CartItem> _items = {};
 
-  Map<String, CartItem> get items => {..._items};
+  Map<dynamic, CartItem> get items => {..._items};
 
   int get itemCount => _items.length;
 
-  bool isItemInCart(String id) {
+  bool isCartEmpty() => _items.length == 0;
+
+  bool isItemInCart(dynamic id) {
     return _items.containsKey(id);
   }
 
   void addItemInCart(Product product) {
-    if (_items.containsKey(product.id)) {
+    if (_items.containsKey(product.id.toString())) {
       _items.update(
-        product.id,
+        product.id.toString(),
         (existingItem) => CartItem(
           id: existingItem.id,
           productId: product.id,
@@ -43,9 +45,9 @@ class CartProvider with ChangeNotifier {
       );
     } else {
       _items.putIfAbsent(
-        product.id,
+        product.id.toString(),
         () => CartItem(
-          id: Random().nextDouble().toString(),
+          id: Random().nextDouble(),
           productId: product.id,
           title: product.title,
           quantity: 1,
@@ -56,12 +58,12 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeItem(String productId) {
-    _items.remove(productId);
+  void removeItem(dynamic productId) {
+    _items.remove(productId.toString());
     notifyListeners();
   }
 
-  void removeSingleItem(String productId) {
+  void removeSingleItem(dynamic productId) {
     if (!_items.containsKey(productId)) {
       return;
     }
@@ -70,7 +72,7 @@ class CartProvider with ChangeNotifier {
       _items.remove(productId);
     } else {
       _items.update(
-        productId,
+        productId.toString(),
         (existingItem) => CartItem(
           id: existingItem.id,
           productId: productId,
@@ -80,7 +82,6 @@ class CartProvider with ChangeNotifier {
         ),
       );
     }
-
     notifyListeners();
   }
 
