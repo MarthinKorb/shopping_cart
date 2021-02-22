@@ -45,10 +45,41 @@ class CartScreen extends StatelessWidget {
                   Spacer(),
                   FlatButton(
                     child: Text('COMPRAR'),
-                    textColor: Theme.of(context).primaryColor,
+                    textColor: Colors.white,
+                    color: Theme.of(context).primaryColor,
                     onPressed: () {
-                      ordersProvider.addOrder(cart: cartProvider);
-                      cartProvider.clearCart();
+                      if (!cartProvider.isCartEmpty()) {
+                        ordersProvider.addOrder(cart: cartProvider);
+                        cartProvider.clearCart();
+                      } else {
+                        showDialog(
+                          context: context,
+                          child: Container(
+                            child: AlertDialog(
+                              title: Text(
+                                'Aviso',
+                                style: TextStyle(color: Colors.black87),
+                              ),
+                              content: Text(
+                                'Não é possível efetuar uma compra sem pelo menos um item no carrinho.',
+                                style: TextStyle(color: Colors.black54),
+                              ),
+                              actions: [
+                                FlatButton(
+                                  child: Text(
+                                    'OK',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  color: Theme.of(context).primaryColor,
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ],

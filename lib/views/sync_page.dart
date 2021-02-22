@@ -19,12 +19,13 @@ class SyncPage extends StatelessWidget {
             Icon(
               Icons.sync,
               color: Theme.of(context).primaryColor,
-              size: 50,
+              size: 60,
             ),
             SizedBox(height: 20),
             Container(
               width: double.infinity,
               child: FlatButton(
+                height: 42,
                 child: Text(
                   'Sincronizar',
                   style: TextStyle(
@@ -32,9 +33,8 @@ class SyncPage extends StatelessWidget {
                     fontSize: 18,
                   ),
                 ),
-                onPressed: () {
-                  Navigator.of(context)
-                      .pushReplacementNamed(AppRoutes.REAL_SYNC);
+                onPressed: () async {
+                  await Navigator.of(context).pushNamed(AppRoutes.REAL_SYNC);
                 },
                 color: Theme.of(context).primaryColor,
               ),

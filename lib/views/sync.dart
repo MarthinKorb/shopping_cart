@@ -8,18 +8,17 @@ class RealSync extends StatefulWidget {
 }
 
 class _RealSyncState extends State<RealSync> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  Future<bool> isSuccess;
 
   @override
   Widget build(BuildContext context) {
+    Future<bool> syncData(BuildContext context) async {
+      return await SyncService(context: context).sincronizaDados();
+    }
+
     syncData(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('SYNC'),
-      ),
       drawer: AppDrawer(),
       body: Container(
         alignment: Alignment.center,
@@ -32,6 +31,7 @@ class _RealSyncState extends State<RealSync> {
                   AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
             ),
             SizedBox(height: 20),
+            SizedBox(height: 20),
             Text(
               'Sincronizando...',
               style: TextStyle(
@@ -43,14 +43,5 @@ class _RealSyncState extends State<RealSync> {
         ),
       ),
     );
-  }
-
-  void syncData(BuildContext context) async {
-    bool isSuccess = await SyncService(context: context).sincronizaDados();
-    if (isSuccess) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text('Sucesso')),
-      );
-    }
   }
 }

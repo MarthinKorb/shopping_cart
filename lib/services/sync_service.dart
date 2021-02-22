@@ -25,16 +25,15 @@ class SyncService {
       inserted = await DatabaseService.insert('Product', product.toMap());
     }
     //dispara um delay na tela loaderPage
-    Future.delayed(const Duration(milliseconds: 3000), () async {
-      try {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.SYNC_PAGE);
-        if (inserted > 0) {
-          return true;
-        }
-      } catch (e) {
-        return e.toString();
-      }
-    });
-    return false;
+    // Future.delayed(const Duration(milliseconds: 3000), () async {
+    Navigator.of(context).pushReplacementNamed(AppRoutes.SYNC_PAGE);
+    if (inserted > 0) {
+      return true;
+    } else {
+      return false;
+    }
+
+    // });
+    // return false;
   }
 }

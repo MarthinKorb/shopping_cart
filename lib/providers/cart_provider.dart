@@ -28,7 +28,7 @@ class CartProvider with ChangeNotifier {
   bool isCartEmpty() => _items.length == 0;
 
   bool isItemInCart(dynamic id) {
-    return _items.containsKey(id);
+    return _items.containsKey(id.toString());
   }
 
   void addItemInCart(Product product) {
@@ -69,7 +69,7 @@ class CartProvider with ChangeNotifier {
     }
 
     if (_items[productId].quantity == 1) {
-      _items.remove(productId);
+      _items.remove(productId.toString());
     } else {
       _items.update(
         productId.toString(),
