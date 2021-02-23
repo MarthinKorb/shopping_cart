@@ -25,7 +25,7 @@ class DatabaseService {
     await db.delete(tabela);
   }
 
-  static Future<void> deletePersonById(String tabela, String index) async {
+  static Future<void> deleteProductById(String tabela, String index) async {
     final db = await DbUtils.database();
     await db.delete(tabela, where: "id = ?", whereArgs: [index]);
   }
