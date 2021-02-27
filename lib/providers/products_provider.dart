@@ -40,21 +40,31 @@ class ProductsProvider with ChangeNotifier {
         category: records[i]["category"],
         price: records[i]["price"],
         image: records[i]["image"],
-        isFavorite: records[i]["isFavorite"],
+        isFavorite: records[i]["isFavorite"] ?? 0,
       );
     });
   }
 
-  Future<int> updateProduct(dynamic id, Product product) async {
-    return await DatabaseService.update('Product', id, product.toMap());
+  void removeProduct(Product product) async {
+    await DatabaseService.deleteProductById('product', product.id.toString());
+    _items
+      ..clear()
+      ..addAll([...await loadProductsFromDB()]);
+    notifyListeners();
+  }
+
+  Future<void> updateProduct(dynamic id, Product product) async {
+    await DatabaseService.update('Product', id, product.toMap());
   }
 
   List<Product> get items => [..._items];
 
-  List<Product> get favoriteItems =>
-      _items.where((product) => product.isFavorite == 1).toList();
+  List<Product> get favoriteItems {
+    return _items.where((product) => product.isFavorite == 1).toList();
+  }
 
-  void addProduct(Product product) {
+  void addProduct(Product product) async {
+    await DatabaseService.insert('product', product.toMap());
     _items.add(product);
     notifyListeners();
   }

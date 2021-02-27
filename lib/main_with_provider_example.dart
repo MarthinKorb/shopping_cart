@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shop_/providers/couter_provider.dart';
-import 'package:shop_/utils/app_routes.dart';
 import 'package:shop_/views/product_detail_screen.dart';
 
+import 'shared/utils/app_routes.dart';
 import 'views/products_overview_screen.dart';
 
 void main() {

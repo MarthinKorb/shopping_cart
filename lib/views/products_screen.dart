@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_/models/product.dart';
 import 'package:shop_/providers/products_provider.dart';
-import 'package:shop_/utils/app_routes.dart';
+import 'package:shop_/shared/utils/app_routes.dart';
 import 'package:shop_/widgets/app_drawer.dart';
 import 'package:shop_/widgets/product_item.dart';
 
 class ProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ProductsProvider productsProvider = Provider.of(context);
-    final productsList = Provider.of<ProductsProvider>(context).items;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -24,18 +23,27 @@ class ProductsScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: productsList.isNotEmpty
-          ? ListView.builder(
-              itemCount: productsProvider.itemsCount,
-              itemBuilder: (context, index) => Column(
-                    children: [
-                      ProductItem(product: productsList[index]),
-                      Divider(),
-                    ],
-                  ))
-          : Center(
-              child: Text('Nenhum produto cadastrado!'),
+      body: FutureBuilder<List<Product>>(
+        future: Provider.of<ProductsProvider>(context).loadProductsFromDB(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: Text(
+                'Nenhum produto cadastrado',
+              ),
+            );
+          }
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) => Column(
+              children: [
+                ProductItem(product: snapshot.data[index]),
+                Divider(),
+              ],
             ),
+          );
+        },
+      ),
     );
   }
 }

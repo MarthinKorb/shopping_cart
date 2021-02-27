@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shop_/utils/app_routes.dart';
+import 'package:shop_/shared/utils/app_routes.dart';
 import 'package:shop_/widgets/app_drawer.dart';
 
 class SyncPage extends StatelessWidget {

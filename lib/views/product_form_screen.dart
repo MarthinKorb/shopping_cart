@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shop_/services/database_service.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_/models/product.dart';
+import 'package:shop_/providers/products_provider.dart';
 
 class ProductFormScreen extends StatefulWidget {
   @override
@@ -36,16 +38,12 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     _imageUrlFocusNode.dispose();
   }
 
-  // Future<http.Response> _saveForm() async {
-  //   // _formKey.currentState.save();
-  //   var response = await http.post(ProductsProvider.apiURL, body: _formData);
-  //   print(response.body);
-  //   return response;
-  // }
-  Future<int> _saveForm() async {
-    // _formKey.currentState.save();
-    var response = await DatabaseService.insert('product', _formData);
-    return response;
+  Future<void> _saveForm() async {
+    _formKey.currentState.save();
+    if (_formKey.currentState.validate()) {
+      Provider.of<ProductsProvider>(context, listen: false)
+          .addProduct(Product.fromMap(_formData));
+    }
   }
 
   @override
@@ -74,8 +72,9 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_priceFocusNode);
                 },
-                onSaved: (newValue) =>
-                    _formData['title'] = double.parse(newValue),
+                validator: (value) =>
+                    value.isEmpty ? 'Campo obrigatório' : null,
+                onSaved: (newValue) => _formData['title'] = newValue,
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Preço'),
@@ -85,7 +84,10 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_descriptionFocusNode);
                 },
-                onSaved: (newValue) => _formData['price'] = newValue,
+                validator: (value) =>
+                    value.isEmpty ? 'Campo obrigatório' : null,
+                onSaved: (newValue) =>
+                    _formData['price'] = double.tryParse(newValue) ?? 0.0,
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Categoria'),
@@ -95,6 +97,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 onFieldSubmitted: (_) {
                   // FocusScope.of(context).requestFocus(_descriptionFocusNode);
                 },
+                validator: (value) =>
+                    value.isEmpty ? 'Campo obrigatório' : null,
                 onSaved: (newValue) => _formData['category'] = newValue,
               ),
               TextFormField(
@@ -107,6 +111,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 onFieldSubmitted: (value) {
                   // FocusScope.of(context).requestFocus(_priceFocusNode);
                 },
+                validator: (value) =>
+                    value.isEmpty ? 'Campo obrigatório' : null,
                 onSaved: (newValue) => _formData['description'] = newValue,
               ),
               Row(
@@ -122,6 +128,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       onFieldSubmitted: (_) {
                         _saveForm();
                       },
+                      validator: (value) =>
+                          value.isEmpty ? 'Campo obrigatório' : null,
                       onSaved: (newValue) => _formData['image'] = newValue,
                     ),
                   ),
@@ -136,16 +144,17 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       ),
                     ),
                     alignment: Alignment.center,
-                    child: FittedBox(
-                        child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: _imageUrlController.text.isEmpty
-                          ? Text('Informe a URL')
-                          : FittedBox(
-                              child: Image.network(_imageUrlController.text),
-                              fit: BoxFit.cover,
-                            ),
-                    )),
+                    // child: FittedBox(
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.all(4.0),
+                    //     child: _imageUrlController.text.isEmpty
+                    //         ? Text('Informe a URL')
+                    //         : FittedBox(
+                    //             child: Image.network(_imageUrlController.text),
+                    //             fit: BoxFit.cover,
+                    //           ),
+                    //   ),
+                    // ),
                   ),
                 ],
               ),

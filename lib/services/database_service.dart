@@ -1,4 +1,4 @@
-import 'package:shop_/utils/DbUtils.dart';
+import 'package:shop_/shared/utils/DbUtils.dart';
 
 class DatabaseService {
   /// Insere um registro na [tabela] no banco de dados

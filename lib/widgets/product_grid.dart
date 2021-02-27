@@ -25,11 +25,8 @@ class ProductGrid extends StatelessWidget {
           return _buildErrorInfo(context);
         }
 
-        if (!snapshot.hasData) {
-          Text('Vazio');
-        }
         List<Product> loadedProducts = showOnlyFavorite
-            ? Provider.of<ProductsProvider>(context).favoriteItems
+            ? snapshot.data.where((p) => p.isFavorite == 1).toList()
             : snapshot.data;
 
         return loadedProducts.length == 0

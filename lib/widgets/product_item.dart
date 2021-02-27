@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_/models/product.dart';
 import 'package:shop_/providers/products_provider.dart';
-import 'package:shop_/services/database_service.dart';
 
 class ProductItem extends StatelessWidget {
   final Product product;
@@ -28,9 +28,10 @@ class ProductItem extends StatelessWidget {
                 color: Theme.of(context).errorColor,
               ),
               onPressed: () async {
-                ProductsProvider().removeProduct(product.id.toString());
-                await DatabaseService.deleteProductById(
-                    'product', product.id.toString());
+                ProductsProvider productsProvider =
+                    Provider.of(context, listen: false);
+                productsProvider.removeProduct(product);
+                Scaffold.of(context).hideCurrentSnackBar();
                 Scaffold.of(context).showSnackBar(
                     SnackBar(content: Text('Produto removido com sucesso.')));
               },

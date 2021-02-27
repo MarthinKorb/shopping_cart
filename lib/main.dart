@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:shop_/providers/cart_provider.dart';
 import 'package:shop_/providers/orders_provider.dart';
 import 'package:shop_/providers/products_provider.dart';
-import 'package:shop_/utils/app_routes.dart';
 import 'package:shop_/views/cart_screen.dart';
 import 'package:shop_/views/orders_screen.dart';
 import 'package:shop_/views/product_detail_screen.dart';
@@ -12,6 +11,7 @@ import 'package:shop_/views/products_screen.dart';
 import 'package:shop_/views/sync.dart';
 import 'package:shop_/views/sync_page.dart';
 
+import 'shared/utils/app_routes.dart';
 import 'views/products_overview_screen.dart';
 
 void main() {

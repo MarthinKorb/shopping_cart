@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:shop_/services/database_service.dart';
 
 class Product with ChangeNotifier {
   final dynamic id;
@@ -20,12 +21,14 @@ class Product with ChangeNotifier {
     @required this.isFavorite,
   });
 
-  void toggleFavorite() {
-    if (isFavorite == 0) {
-      isFavorite = 1;
-    } else {
-      isFavorite = 0;
-    }
+  void toggleFavorite() async {
+    this.isFavorite == 0 ? this.isFavorite = 1 : this.isFavorite = 0;
+
+    await DatabaseService.update(
+      'product',
+      this.id,
+      {"isFavorite": this.isFavorite},
+    );
     notifyListeners();
   }
 
