@@ -4,6 +4,7 @@ import 'package:shop_/models/product.dart';
 import 'package:shop_/providers/products_provider.dart';
 import 'package:shop_/shared/utils/app_routes.dart';
 import 'package:shop_/widgets/app_drawer.dart';
+import 'package:shop_/widgets/info_empty_list.dart';
 import 'package:shop_/widgets/product_item.dart';
 
 class ProductsScreen extends StatelessWidget {
@@ -26,11 +27,10 @@ class ProductsScreen extends StatelessWidget {
       body: FutureBuilder<List<Product>>(
         future: Provider.of<ProductsProvider>(context).loadProductsFromDB(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: Text(
-                'Nenhum produto cadastrado',
-              ),
+          if (snapshot.data.isEmpty) {
+            return InfoEmptyList(
+              message: 'Nenhum produto cadastrado',
+              iconData: Icons.wysiwyg_outlined,
             );
           }
           return ListView.builder(

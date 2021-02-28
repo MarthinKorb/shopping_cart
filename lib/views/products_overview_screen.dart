@@ -27,7 +27,9 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         title: _showFavoritesOnly ? Text('Meus Favoritos') : Text(''),
         actions: [
           IconButton(
-            icon: Icon(Icons.filter_alt_outlined),
+            icon: _showCompactGrid
+                ? Icon(Icons.filter_list_outlined)
+                : Icon(Icons.filter_list_alt),
             onPressed: () {
               setState(() {
                 _showCompactGrid = !_showCompactGrid;

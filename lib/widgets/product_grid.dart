@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import 'package:shop_/models/product.dart';
 import 'package:shop_/providers/products_provider.dart';
+import 'package:shop_/views/products_overview_screen.dart';
+import 'package:shop_/widgets/info_empty_list.dart';
 import 'package:shop_/widgets/product_grid_item.dart';
 
 class ProductGrid extends StatelessWidget {
@@ -22,15 +24,28 @@ class ProductGrid extends StatelessWidget {
         }
 
         if (snapshot.hasError) {
-          return _buildErrorInfo(context);
+          return InfoEmptyList(
+            message: 'Erro ao carregar os dados',
+            iconData: Icons.error_outline,
+          );
         }
 
         List<Product> loadedProducts = showOnlyFavorite
             ? snapshot.data.where((p) => p.isFavorite == 1).toList()
             : snapshot.data;
 
-        return loadedProducts.length == 0
-            ? _buildEmptyListInfo(context)
+        if (showOnlyFavorite) {
+          return InfoEmptyList(
+            message: 'Nenhum produto na lista de favoritos',
+            iconData: Icons.favorite_border_outlined,
+          );
+        }
+
+        return loadedProducts.length == 0 && !showOnlyFavorite
+            ? InfoEmptyList(
+                message: 'Nenhum produto cadastrado',
+                iconData: Icons.wysiwyg_outlined,
+              )
             : GridView.builder(
                 itemCount: loadedProducts.length,
                 padding: EdgeInsets.all(10),
@@ -64,24 +79,6 @@ class ProductGrid extends StatelessWidget {
     );
   }
 
-  Container _buildErrorInfo(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Erro ao carregar os dados...',
-            style: TextStyle(
-              color: Theme.of(context).primaryColor,
-              fontSize: 18,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Container _buildLoadingInfo(BuildContext context) {
     return Container(
       alignment: Alignment.center,
@@ -106,36 +103,3 @@ class ProductGrid extends StatelessWidget {
     );
   }
 }
-
-// class ProductGrid extends StatelessWidget {
-//   final bool showOnlyFavorite;
-
-//   const ProductGrid({Key key, this.showOnlyFavorite}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final ProductsProvider provider = Provider.of<ProductsProvider>(context);
-
-//     final List<Product> loadedProducts =
-//         showOnlyFavorite ? provider.favoriteItems : provider.items;
-
-//     return loadedProducts.length == 0
-//         ? Center(child: Text('Nenhum produto favoritado'))
-//         : GridView.builder(
-//             itemCount: loadedProducts.length,
-//             padding: EdgeInsets.all(10),
-//             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//               crossAxisCount: 2,
-//               childAspectRatio: 3 / 2,
-//               crossAxisSpacing: 10,
-//               mainAxisSpacing: 10,
-//             ),
-//             itemBuilder: (context, index) {
-//               return ChangeNotifierProvider.value(
-//                 value: loadedProducts[index],
-//                 child: ProductGridItem(),
-//               );
-//             },
-//           );
-//   }
-// }

@@ -13,7 +13,7 @@ class DbUtils {
       // Função chamada na criação do banco
       onCreate: (db, version) {
         return db.execute('''
-            CREATE TABLE Product (
+            CREATE TABLE product (
                 id INTEGER PRIMARY KEY,
                 title TEXT,
                 description TEXT,
@@ -26,3 +26,22 @@ class DbUtils {
     );
   }
 }
+
+// CREATE TABLE order (
+//     id INTEGER PRIMARY KEY,
+//     total NUMBER,
+//     date TEXT,
+// );
+// CREATE TABLE product_order (
+//     id INTEGER PRIMARY KEY,
+//     id_product INTEGER,
+//     id_order INTEGER,
+//      FOREIGN KEY (id_product)
+//       REFERENCES Product (id)
+//         ON UPDATE SET CASCADE
+//         ON DELETE SET CASCADE
+//      FOREIGN KEY (id_order)
+//       REFERENCES oder (id)
+//         ON UPDATE SET CASCADE
+//         ON DELETE SET CASCADE
+// );

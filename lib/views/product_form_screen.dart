@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_/models/product.dart';
 import 'package:shop_/providers/products_provider.dart';
@@ -14,10 +17,73 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   final _categoryFocusNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
 
-  final _imageUrlController = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
   final _formData = Map<String, Object>();
+  final _formKey = GlobalKey<FormState>();
+
+  File _image;
+
+  _imgFromCamera() async {
+    File image = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 50,
+    );
+
+    setState(() {
+      _image = image;
+    });
+  }
+
+  _imgFromGallery() async {
+    File image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 50);
+
+    setState(() {
+      _image = image;
+    });
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: [
+                  ListTile(
+                    leading: new Icon(
+                      Icons.photo_library,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    title: new Text(
+                      'Galeria',
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                    ),
+                    onTap: () {
+                      _imgFromGallery();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  ListTile(
+                    leading: new Icon(
+                      Icons.photo_camera,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    title: new Text(
+                      'Câmera',
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                    ),
+                    onTap: () {
+                      _imgFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
 
   @override
   void initState() {
@@ -28,8 +94,9 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_formData.isEmpty) {
-      final productArgs = ModalRoute.of(context).settings.arguments as Product;
+    final productArgs = ModalRoute.of(context).settings.arguments as Product;
+    if (productArgs != null) {
+      _formData.clear();
       _formData['id'] = productArgs.id;
       _formData['title'] = productArgs.title;
       _formData['price'] = productArgs.price;
@@ -63,21 +130,26 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         final success =
             await productsProvider.updateProduct(Product.fromMap(_formData));
         if (!success) {
-          return AlertDialog(
-            content: Text('Erro ao realizar a atualização do produto'),
-            actions: [
-              RaisedButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
+          Navigator.of(context).pop();
+          return _showAlertDialog();
         }
       }
       Navigator.of(context).pop();
     }
+  }
+
+  AlertDialog _showAlertDialog() {
+    return AlertDialog(
+      content: Text('Erro ao realizar a atualização do produto'),
+      actions: [
+        RaisedButton(
+          child: Text('OK'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        )
+      ],
+    );
   }
 
   @override
@@ -87,7 +159,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         title: Text('Formulário de produto'),
         actions: [
           IconButton(
-            icon: Icon(Icons.save),
+            icon: Icon(Icons.check),
             onPressed: () {
               _saveForm(context);
             },
@@ -101,7 +173,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           child: ListView(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Título'),
+                decoration: InputDecoration(labelText: 'Título', filled: true),
                 initialValue: _formData['title'],
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
@@ -111,35 +183,40 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                     value.isEmpty ? 'Campo obrigatório' : null,
                 onSaved: (newValue) => _formData['title'] = newValue,
               ),
+              SizedBox(height: 10),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Preço'),
-                initialValue: _formData['price'].toString(),
+                decoration: InputDecoration(labelText: 'Preço', filled: true),
+                initialValue: _formData['price']?.toString(),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 focusNode: _priceFocusNode,
                 onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(_descriptionFocusNode);
+                  FocusScope.of(context).requestFocus(_categoryFocusNode);
                 },
                 validator: (value) =>
                     value.isEmpty ? 'Campo obrigatório' : null,
                 onSaved: (newValue) =>
                     _formData['price'] = double.tryParse(newValue) ?? 0.0,
               ),
+              SizedBox(height: 10),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Categoria'),
+                decoration:
+                    InputDecoration(labelText: 'Categoria', filled: true),
                 initialValue: _formData['category'],
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.text,
                 focusNode: _categoryFocusNode,
                 onFieldSubmitted: (_) {
-                  // FocusScope.of(context).requestFocus(_descriptionFocusNode);
+                  FocusScope.of(context).requestFocus(_descriptionFocusNode);
                 },
                 validator: (value) =>
                     value.isEmpty ? 'Campo obrigatório' : null,
                 onSaved: (newValue) => _formData['category'] = newValue,
               ),
+              SizedBox(height: 10),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Descrição'),
+                decoration:
+                    InputDecoration(labelText: 'Descrição', filled: true),
                 initialValue: _formData['description'],
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.multiline,
@@ -147,22 +224,30 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 maxLines: 3,
                 focusNode: _descriptionFocusNode,
                 onFieldSubmitted: (value) {
-                  FocusScope.of(context).requestFocus(_priceFocusNode);
+                  FocusScope.of(context).requestFocus(_imageUrlFocusNode);
                 },
                 validator: (value) =>
                     value.isEmpty ? 'Campo obrigatório' : null,
                 onSaved: (newValue) => _formData['description'] = newValue,
               ),
+              SizedBox(height: 10),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Expanded(
                     child: TextFormField(
-                      decoration: InputDecoration(labelText: 'URL da imagem'),
+                      decoration: InputDecoration(
+                        labelText: 'Imagem',
+                        filled: true,
+                      ),
+                      // onTap: () {
+                      //   _showPicker(context);
+                      // },
                       initialValue: _formData['image'],
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
                       focusNode: _imageUrlFocusNode,
+                      // readOnly: true,
                       // controller: _imageUrlController,
                       onSaved: (newValue) => _formData['image'] = newValue,
                       onFieldSubmitted: (_) {
@@ -170,28 +255,46 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       },
                     ),
                   ),
-                  Container(
-                    height: 100,
-                    width: 100,
-                    margin: EdgeInsets.only(top: 8, left: 10),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                        width: 1,
+                  SizedBox(width: 10),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 12,
                       ),
-                    ),
-                    alignment: Alignment.center,
-                    child: FittedBox(
-                        // child: Padding(
-                        //   padding: const EdgeInsets.all(4.0),
-                        //   child: _imageUrlController.text.isEmpty
-                        //       ? Text('Informe a URL')
-                        //       : FittedBox(
-                        //           child: Image.network(_imageUrlController.text),
-                        //           fit: BoxFit.cover,
-                        //         ),
-                        // ),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            _showPicker(context);
+                          },
+                          child: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            child: _image != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: Image.file(
+                                      _image,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.fitHeight,
+                                    ),
+                                  )
+                                : Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    width: 100,
+                                    height: 100,
+                                    child: Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.grey[800],
+                                    ),
+                                  ),
+                          ),
                         ),
+                      )
+                    ],
                   ),
                 ],
               ),

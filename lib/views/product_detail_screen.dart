@@ -147,7 +147,7 @@ class DescriptionHeader extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(left: 8),
             child: Text(
-              'Description',
+              'Descrição',
               style: TextStyle(
                 color: Theme.of(context).primaryColor,
                 fontSize: 16,
@@ -180,6 +180,10 @@ class ImageSession extends StatelessWidget {
         product.image,
         fit: BoxFit.contain,
       ),
+      // : Image.asset(
+      //     product.image,
+      //     fit: BoxFit.contain,
+      //   ),
     );
   }
 }

@@ -24,6 +24,7 @@ class ProductGridItem extends StatelessWidget {
             product.image,
             fit: BoxFit.contain,
           ),
+          // : Image.asset(product.image),
         ),
         footer: GridTileBar(
           backgroundColor: Colors.black87,
