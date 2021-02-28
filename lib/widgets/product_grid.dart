@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import 'package:shop_/models/product.dart';
 import 'package:shop_/providers/products_provider.dart';
-import 'package:shop_/views/products_overview_screen.dart';
 import 'package:shop_/widgets/info_empty_list.dart';
 import 'package:shop_/widgets/product_grid_item.dart';
 
@@ -34,7 +33,7 @@ class ProductGrid extends StatelessWidget {
             ? snapshot.data.where((p) => p.isFavorite == 1).toList()
             : snapshot.data;
 
-        if (showOnlyFavorite) {
+        if (showOnlyFavorite && loadedProducts.isEmpty) {
           return InfoEmptyList(
             message: 'Nenhum produto na lista de favoritos',
             iconData: Icons.favorite_border_outlined,
@@ -63,19 +62,6 @@ class ProductGrid extends StatelessWidget {
                 },
               );
       },
-    );
-  }
-
-  Center _buildEmptyListInfo(BuildContext context) {
-    return Center(
-      child: Text(
-        'Nenhum produto na lista de favoritos',
-        style: TextStyle(
-          color: Theme.of(context).primaryColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
-        ),
-      ),
     );
   }
 

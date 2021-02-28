@@ -243,7 +243,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       // onTap: () {
                       //   _showPicker(context);
                       // },
-                      initialValue: _formData['image'],
+                      initialValue: _formData['image'] ??
+                          'https://s2.glbimg.com/Oo5NXrkvypd6NlsHL1tuEfHXsms=/680x511/s.glbimg.com/po/tt/f/original/2012/07/27/meme-que-imortalizou-a-pose-do-fisico.jpg',
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
                       focusNode: _imageUrlFocusNode,

@@ -27,7 +27,7 @@ class ProductsScreen extends StatelessWidget {
       body: FutureBuilder<List<Product>>(
         future: Provider.of<ProductsProvider>(context).loadProductsFromDB(),
         builder: (context, snapshot) {
-          if (snapshot.data.isEmpty) {
+          if (!snapshot.hasData) {
             return InfoEmptyList(
               message: 'Nenhum produto cadastrado',
               iconData: Icons.wysiwyg_outlined,
