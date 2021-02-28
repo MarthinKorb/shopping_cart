@@ -53,8 +53,18 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateProduct(dynamic id, Product product) async {
-    await DatabaseService.update('Product', id, product.toMap());
+  Future<bool> updateProduct(Product product) async {
+    _items
+      ..clear()
+      ..addAll([...await loadProductsFromDB()]);
+    final prodToUpdate = _items.indexWhere((prod) => prod.id == product.id);
+    if (prodToUpdate >= 0) {
+      await DatabaseService.update('Product', product.id, product.toMap());
+      _items[prodToUpdate] = product;
+      notifyListeners();
+      return true;
+    }
+    return false;
   }
 
   List<Product> get items => [..._items];

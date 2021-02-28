@@ -44,30 +44,34 @@ class ProductGridItem extends StatelessWidget {
             product.title,
             textAlign: TextAlign.center,
           ),
-          trailing: Consumer<CartProvider>(builder: (context, value, _) {
-            return IconButton(
-              icon: value.isItemInCart(product.id)
-                  ? Icon(Icons.shopping_cart)
-                  : Icon(Icons.shopping_cart_outlined),
-              onPressed: () {
-                cartProvider.addItemInCart(product);
-                Scaffold.of(context).hideCurrentSnackBar();
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    content:
-                        Text('Produto ${product.title} inserido no carrinho.'),
-                    action: SnackBarAction(
-                      label: 'DESFAZER',
-                      onPressed: () {
-                        value.removeSingleItem(product.id.toString());
-                      },
+          trailing: Consumer<CartProvider>(
+            builder: (context, value, _) {
+              return IconButton(
+                icon: value.isItemInCart(product.id)
+                    ? Icon(Icons.shopping_cart)
+                    : Icon(Icons.shopping_cart_outlined),
+                color: Theme.of(context).accentColor,
+                onPressed: () {
+                  cartProvider.addItemInCart(product);
+                  Scaffold.of(context).hideCurrentSnackBar();
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Produto ${product.title} inserido no carrinho.',
+                      ),
+                      backgroundColor: Colors.purple,
+                      action: SnackBarAction(
+                        label: 'DESFAZER',
+                        onPressed: () {
+                          value.removeSingleItem(product.id.toString());
+                        },
+                      ),
                     ),
-                  ),
-                );
-              },
-              color: Theme.of(context).accentColor,
-            );
-          }),
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );

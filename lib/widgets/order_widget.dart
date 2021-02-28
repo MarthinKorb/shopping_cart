@@ -46,7 +46,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                         children: [
                           FittedBox(
                             child: Text(
-                              product.title.split(" ").first,
+                              product.title,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),

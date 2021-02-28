@@ -24,6 +24,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: _showFavoritesOnly ? Text('Meus Favoritos') : Text(''),
         actions: [
           IconButton(
             icon: Icon(Icons.filter_alt_outlined),

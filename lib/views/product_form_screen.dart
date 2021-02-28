@@ -25,6 +25,20 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     _imageUrlFocusNode.addListener(_updateImageUrl);
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_formData.isEmpty) {
+      final productArgs = ModalRoute.of(context).settings.arguments as Product;
+      _formData['id'] = productArgs.id;
+      _formData['title'] = productArgs.title;
+      _formData['price'] = productArgs.price;
+      _formData['category'] = productArgs.category;
+      _formData['description'] = productArgs.description;
+      _formData['image'] = productArgs.image;
+    }
+  }
+
   void _updateImageUrl() {
     setState(() {});
   }
@@ -38,11 +52,31 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     _imageUrlFocusNode.dispose();
   }
 
-  Future<void> _saveForm() async {
+  Future<void> _saveForm(BuildContext ctx) async {
+    final productsProvider =
+        Provider.of<ProductsProvider>(context, listen: false);
     _formKey.currentState.save();
     if (_formKey.currentState.validate()) {
-      Provider.of<ProductsProvider>(context, listen: false)
-          .addProduct(Product.fromMap(_formData));
+      if (_formData['id'] == null) {
+        productsProvider.addProduct(Product.fromMap(_formData));
+      } else {
+        final success =
+            await productsProvider.updateProduct(Product.fromMap(_formData));
+        if (!success) {
+          return AlertDialog(
+            content: Text('Erro ao realizar a atualização do produto'),
+            actions: [
+              RaisedButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        }
+      }
+      Navigator.of(context).pop();
     }
   }
 
@@ -55,7 +89,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
-              _saveForm();
+              _saveForm(context);
             },
           ),
         ],
@@ -68,6 +102,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
             children: [
               TextFormField(
                 decoration: InputDecoration(labelText: 'Título'),
+                initialValue: _formData['title'],
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_priceFocusNode);
@@ -78,6 +113,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Preço'),
+                initialValue: _formData['price'].toString(),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 focusNode: _priceFocusNode,
@@ -91,6 +127,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Categoria'),
+                initialValue: _formData['category'],
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.text,
                 focusNode: _categoryFocusNode,
@@ -103,13 +140,14 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Descrição'),
+                initialValue: _formData['description'],
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.multiline,
                 minLines: 1,
                 maxLines: 3,
                 focusNode: _descriptionFocusNode,
                 onFieldSubmitted: (value) {
-                  // FocusScope.of(context).requestFocus(_priceFocusNode);
+                  FocusScope.of(context).requestFocus(_priceFocusNode);
                 },
                 validator: (value) =>
                     value.isEmpty ? 'Campo obrigatório' : null,
@@ -121,16 +159,15 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   Expanded(
                     child: TextFormField(
                       decoration: InputDecoration(labelText: 'URL da imagem'),
+                      initialValue: _formData['image'],
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
                       focusNode: _imageUrlFocusNode,
-                      controller: _imageUrlController,
-                      onFieldSubmitted: (_) {
-                        _saveForm();
-                      },
-                      validator: (value) =>
-                          value.isEmpty ? 'Campo obrigatório' : null,
+                      // controller: _imageUrlController,
                       onSaved: (newValue) => _formData['image'] = newValue,
+                      onFieldSubmitted: (_) {
+                        _saveForm(context);
+                      },
                     ),
                   ),
                   Container(
@@ -144,17 +181,17 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       ),
                     ),
                     alignment: Alignment.center,
-                    // child: FittedBox(
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.all(4.0),
-                    //     child: _imageUrlController.text.isEmpty
-                    //         ? Text('Informe a URL')
-                    //         : FittedBox(
-                    //             child: Image.network(_imageUrlController.text),
-                    //             fit: BoxFit.cover,
-                    //           ),
-                    //   ),
-                    // ),
+                    child: FittedBox(
+                        // child: Padding(
+                        //   padding: const EdgeInsets.all(4.0),
+                        //   child: _imageUrlController.text.isEmpty
+                        //       ? Text('Informe a URL')
+                        //       : FittedBox(
+                        //           child: Image.network(_imageUrlController.text),
+                        //           fit: BoxFit.cover,
+                        //         ),
+                        // ),
+                        ),
                   ),
                 ],
               ),

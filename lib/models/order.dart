@@ -1,4 +1,4 @@
-import 'package:shop_/providers/cart_provider.dart';
+import 'package:shop_/models/cart_item.dart';
 
 class Order {
   final dynamic id;

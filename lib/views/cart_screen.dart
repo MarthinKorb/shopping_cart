@@ -19,7 +19,7 @@ class CartScreen extends StatelessWidget {
       body: Column(
         children: [
           Card(
-            margin: EdgeInsets.all(20),
+            margin: EdgeInsets.all(14),
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Row(
@@ -33,6 +33,7 @@ class CartScreen extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   Chip(
+                    elevation: 6,
                     label: Text(
                       'R\$ ${cartProvider.totalAmount.toStringAsFixed(2)}',
                       style: TextStyle(
@@ -43,44 +44,49 @@ class CartScreen extends StatelessWidget {
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
                   Spacer(),
-                  FlatButton(
-                    child: Text('COMPRAR'),
-                    textColor: Colors.white,
-                    color: Theme.of(context).primaryColor,
-                    onPressed: () {
-                      if (!cartProvider.isCartEmpty()) {
-                        ordersProvider.addOrder(cart: cartProvider);
-                        cartProvider.clearCart();
-                      } else {
-                        showDialog(
-                          context: context,
-                          child: Container(
-                            child: AlertDialog(
-                              title: Text(
-                                'Aviso',
-                                style: TextStyle(color: Colors.black87),
-                              ),
-                              content: Text(
-                                'Não é possível efetuar uma compra sem pelo menos um item no carrinho.',
-                                style: TextStyle(color: Colors.black54),
-                              ),
-                              actions: [
-                                FlatButton(
-                                  child: Text(
-                                    'OK',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  color: Theme.of(context).primaryColor,
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    child: FlatButton(
+                      child: Text('COMPRAR'),
+                      textColor: Colors.white,
+                      onPressed: () {
+                        if (!cartProvider.isCartEmpty()) {
+                          ordersProvider.addOrder(cart: cartProvider);
+                          cartProvider.clearCart();
+                        } else {
+                          showDialog(
+                            context: context,
+                            child: Container(
+                              child: AlertDialog(
+                                title: Text(
+                                  'Aviso',
+                                  style: TextStyle(color: Colors.black87),
                                 ),
-                              ],
+                                content: Text(
+                                  'Não é possível efetuar uma compra sem pelo menos um item no carrinho.',
+                                  style: TextStyle(color: Colors.black54),
+                                ),
+                                actions: [
+                                  FlatButton(
+                                    child: Text(
+                                      'OK',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    color: Theme.of(context).primaryColor,
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      }
-                    },
+                          );
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),

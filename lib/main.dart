@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           fontFamily: 'RobotoSlab',
         ),
+        debugShowCheckedModeBanner: false,
         home: ProductOverviewScreen(),
         routes: {
           AppRoutes.PRODUCT_DETAIL: (context) => ProductDetailScreen(),
