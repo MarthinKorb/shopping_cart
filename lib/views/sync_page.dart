@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:shop_/shared/utils/app_routes.dart';
+import 'package:shop_/services/sync_service.dart';
 import 'package:shop_/widgets/app_drawer.dart';
 
 class SyncPage extends StatelessWidget {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Sincronização'),
       ),
@@ -16,11 +18,7 @@ class SyncPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
-              Icons.sync,
-              color: Theme.of(context).primaryColor,
-              size: 60,
-            ),
+            Image.asset('assets/images/sync.png', height: 160),
             SizedBox(height: 20),
             Container(
               width: double.infinity,
@@ -34,7 +32,48 @@ class SyncPage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () async {
-                  await Navigator.of(context).pushNamed(AppRoutes.REAL_SYNC);
+                  // await Navigator.of(context).pushNamed(AppRoutes.REAL_SYNC);
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Scaffold(
+                        body: Container(
+                          height: MediaQuery.of(context).size.height,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              SizedBox(height: 20),
+                              Text(
+                                'Sincronizando...',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 20,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+
+                  Future.delayed(const Duration(seconds: 3), () async {
+                    final syncSuccess =
+                        await SyncService(context: context).sincronizaDados();
+                    var message = 'Sincronização concluída com sucesso.';
+                    if (!syncSuccess) {
+                      message = 'Erro ao fazer a sincronização';
+                    }
+                    _scaffoldKey.currentState.showSnackBar(
+                      SnackBar(
+                        content: Text(message),
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                  });
                 },
                 color: Theme.of(context).primaryColor,
               ),

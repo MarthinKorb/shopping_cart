@@ -15,21 +15,25 @@ class SyncService {
   int inserted = 0;
 
   Future<bool> sincronizaDados() async {
-    ProductsProvider productsProvider = Provider.of(context);
+    try {
+      ProductsProvider productsProvider = Provider.of(context, listen: false);
 
-    await DatabaseService.deleteAll('Product');
+      await DatabaseService.deleteAll('Product');
 
-    List<Product> dadosAPI = await productsProvider.loadList();
+      List<Product> dadosAPI = await productsProvider.loadList();
 
-    for (var product in dadosAPI) {
-      inserted = await DatabaseService.insert('Product', product.toMap());
-    }
+      for (var product in dadosAPI) {
+        inserted = await DatabaseService.insert('Product', product.toMap());
+      }
 
-    Navigator.of(context).pushReplacementNamed(AppRoutes.SYNC_PAGE);
-    if (inserted > 0) {
-      return true;
-    } else {
-      return false;
+      // Navigator.of(context).pushReplacementNamed(AppRoutes.SYNC_PAGE);
+      if (inserted > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      throw e.toString();
     }
   }
 }

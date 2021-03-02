@@ -23,17 +23,13 @@ class OrdersScreen extends StatelessWidget {
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.sentiment_dissatisfied_rounded,
-                  color: Theme.of(context).primaryColor,
-                  size: 40,
-                ),
-                SizedBox(height: 10),
+                Image.asset('assets/images/info.png', height: 120),
+                SizedBox(height: 20),
                 Center(
                   child: Text(
                     'Você não tem pedidos.',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.bold,
                     ),
