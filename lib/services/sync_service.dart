@@ -18,6 +18,7 @@ class SyncService {
       ProductsProvider productsProvider = Provider.of(context, listen: false);
 
       await DatabaseService.deleteAll('Product');
+      await DatabaseService.deleteAll('Order');
 
       List<Product> dadosAPI = await productsProvider.loadList();
 

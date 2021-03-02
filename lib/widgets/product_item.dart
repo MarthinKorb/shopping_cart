@@ -48,7 +48,20 @@ class ProductItem extends StatelessWidget {
                   productsProvider.removeProduct(product);
                   Scaffold.of(context).hideCurrentSnackBar();
                   Scaffold.of(context).showSnackBar(
-                      SnackBar(content: Text('Produto removido com sucesso.')));
+                    SnackBar(
+                      content: Row(
+                        children: [
+                          Icon(Icons.check),
+                          SizedBox(width: 10),
+                          Text(
+                            'Produto removido com sucesso.',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      backgroundColor: Theme.of(context).primaryColor,
+                    ),
+                  );
                 },
               ),
             ],

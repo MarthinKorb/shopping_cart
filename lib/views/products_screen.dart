@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_/models/product.dart';
 import 'package:shop_/providers/products_provider.dart';
+import 'package:shop_/services/database_service.dart';
 import 'package:shop_/shared/utils/app_routes.dart';
 import 'package:shop_/widgets/app_drawer.dart';
 import 'package:shop_/widgets/info_empty_list.dart';
 import 'package:shop_/widgets/product_item.dart';
 
 class ProductsScreen extends StatelessWidget {
+  Future<List> getOrders() async {
+    var data = await DatabaseService.query('Order');
+    print(data);
+    return data;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,6 +22,9 @@ class ProductsScreen extends StatelessWidget {
         centerTitle: true,
         title: Text('Manutenção de Produtos'),
         actions: [
+          IconButton(
+              icon: Icon(Icons.do_disturb_alt_sharp),
+              onPressed: () => getOrders()),
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
