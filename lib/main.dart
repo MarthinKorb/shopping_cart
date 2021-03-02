@@ -10,12 +10,41 @@ import 'package:shop_/views/product_form_screen.dart';
 import 'package:shop_/views/products_screen.dart';
 import 'package:shop_/views/sync.dart';
 import 'package:shop_/views/sync_page.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 import 'shared/utils/app_routes.dart';
 import 'views/products_overview_screen.dart';
 
 void main() {
   runApp(MyApp());
+}
+
+class MySplash extends StatefulWidget {
+  @override
+  _MySplashState createState() => _MySplashState();
+}
+
+class _MySplashState extends State<MySplash> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: SplashScreen(
+        seconds: 4,
+        navigateAfterSeconds: MyApp(),
+        title: new Text(
+          'Bem vindo!',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        ),
+        image: Image.network(
+          'https://flutter.io/images/catalog-widget-placeholder.png',
+          height: 140,
+          width: 140,
+        ),
+        backgroundColor: Colors.white,
+        loaderColor: Colors.red,
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {

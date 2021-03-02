@@ -25,7 +25,6 @@ class ProductGrid extends StatelessWidget {
         if (snapshot.hasError) {
           return InfoEmptyList(
             message: 'Erro ao carregar os dados',
-            iconData: Icons.error_outline,
           );
         }
 
@@ -36,14 +35,12 @@ class ProductGrid extends StatelessWidget {
         if (showOnlyFavorite && loadedProducts.isEmpty) {
           return InfoEmptyList(
             message: 'Nenhum produto na lista de favoritos',
-            iconData: Icons.favorite_border_outlined,
           );
         }
 
         return loadedProducts.length == 0 && !showOnlyFavorite
             ? InfoEmptyList(
                 message: 'Nenhum produto cadastrado',
-                iconData: Icons.wysiwyg_outlined,
               )
             : GridView.builder(
                 itemCount: loadedProducts.length,

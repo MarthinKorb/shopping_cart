@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 
 class InfoEmptyList extends StatelessWidget {
   final String message;
-  final IconData iconData;
   const InfoEmptyList({
     @required this.message,
-    @required this.iconData,
     Key key,
   }) : super(key: key);
 
@@ -17,18 +15,18 @@ class InfoEmptyList extends StatelessWidget {
         Center(
           child: Column(
             children: [
+              Image.asset(
+                'assets/images/info.png',
+                height: 120,
+                width: 120,
+              ),
+              SizedBox(height: 20),
               Text(
                 message,
                 style: TextStyle(
                   color: Theme.of(context).primaryColor,
-                  fontSize: 18,
+                  fontSize: 20,
                 ),
-              ),
-              SizedBox(height: 20),
-              Icon(
-                iconData,
-                size: 40,
-                color: Theme.of(context).primaryColor,
               ),
             ],
           ),

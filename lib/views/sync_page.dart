@@ -69,7 +69,11 @@ class SyncPage extends StatelessWidget {
                     }
                     _scaffoldKey.currentState.showSnackBar(
                       SnackBar(
-                        content: Text(message),
+                        content: Text(
+                          message,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Theme.of(context).primaryColor,
                       ),
                     );
                     Navigator.of(context).pop();

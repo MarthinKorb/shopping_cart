@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_/models/product.dart';
 import 'package:shop_/providers/products_provider.dart';
-import 'package:shop_/shared/utils/app_routes.dart';
 
 import 'database_service.dart';
 
